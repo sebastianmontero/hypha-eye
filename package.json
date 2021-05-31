@@ -1,0 +1,57 @@
+{
+  "name": "@smontero/document-cache",
+  "version": "0.0.7",
+  "description": "DGraph cache layer for hypha documents",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx babel src --out-dir dist",
+    "start:dev": "eval \"$(./set-local-env.sh)\" npx nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "jest --watch --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypha-dao/document-cache.git"
+  },
+  "keywords": [
+    "hypha",
+    "document",
+    "cache"
+  ],
+  "author": "Sebastian Montero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hypha-dao/document-cache/issues"
+  },
+  "homepage": "https://github.com/hypha-dao/document-cache#readme",
+  "dependencies": {
+    "@eosrio/hyperion-stream-client": "^0.4.0-beta.5",
+    "config": "^3.3.1",
+    "data-store": "^4.0.3",
+    "dgraph-js-http": "^21.3.1",
+    "express": "^4.17.1",
+    "fastify": "^3.7.0",
+    "fastify-cors": "^4.1.0",
+    "fastify-plugin": "^3.0.0",
+    "fastify-swagger": "^3.5.0",
+    "json2csv": "^5.0.6",
+    "node-fetch": "^2.6.1",
+    "pino-pretty": "^4.3.0",
+    "prom-client": "^13.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.5",
+    "@babel/core": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@types/jest": "^26.0.10",
+    "await-sleep": "0.0.1",
+    "eslint": "^7.7.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2",
+    "nodemon": "^2.0.7"
+  }
+}

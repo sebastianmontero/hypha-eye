@@ -1,0 +1,504 @@
+{
+  documents as var(func: type(Document))@cascade{
+    hash
+    content_groups {
+      contents  @filter(eq(value,"badge") and eq(type, "name")){
+        label
+        type
+      }
+    }
+  }
+  documents(func: uid(documents), orderdesc:created_date, first:10, offset:0) {
+    hash
+    content_groups {
+        expand(_all_) {
+        expand(_all_)
+      }
+    }
+  }
+}
+{
+  assignments(func: has(assignment),orderdesc:created_date, first:10, offset:0 ){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+  }
+}
+
+{
+  var(func: has(badge)){
+      badges as badge{}
+  }
+  badges(func: uid(badges)){
+    hash
+    creator
+    created_date
+    content_groups{
+      expand(_all_){
+        expand(_all_)
+      }
+    }
+  }
+}
+
+
+ query document($hash:string){
+      document(func: eq(hash, $hash)) {
+        hash
+        creator
+        created_date
+        content_groups{
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      }
+    }
+
+{
+  dhos as var(func: type(Document))@cascade{
+    hash
+    content_groups {
+      contents  @filter(eq(value,"dho") and eq(label, "type")){
+        label
+        type
+      }
+    }
+  }
+  dhos(func: uid(dhos), orderdesc:created_date, first:10, offset:0) {
+    hash
+    content_groups {
+        expand(_all_) {
+        expand(_all_)
+      }
+    }
+  }
+}
+
+
+query document($dhohash:string, $account:string){
+  var(func: eq(hash, $dhohash)) {
+    hash
+    creator
+    created_date
+    member as member @cascade {
+      hash
+      creator
+      created_date
+      content_groups {
+        contents  @filter(eq(value,$account) and eq(label, "member")){
+          label
+          type
+          value
+        }
+      }
+    }
+  }
+  member(func: uid(member)){
+    hash
+    creator
+    created_date
+    content_groups {
+        expand(_all_) {
+        expand(_all_)
+      }
+    }
+  }
+}
+
+
+query applicants($first:int, $offset: int){
+    var(func: has(applicant)){
+      applicants as applicant @cascade{
+        created_date
+      }
+    }
+    applicants(func: uid(applicants), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+
+query applicants($first:int, $offset: int) {
+    var(func: has(applicant)){
+      applicants as applicant @cascade{
+        created_date
+      }
+    }
+    applicants(func: uid(applicants), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+
+
+  query assignments($first:int, $offset: int, $user: string) {
+    var(func: has(assignment)){
+      assignedto as assignment @cascade{
+        created_date
+        content_groups {
+          contents  @filter(eq(value,$user) and eq(label, "assignee")){
+            label
+            value
+          }
+        }
+      }
+    }
+    assignments as var(func: uid(assignedto))@cascade{
+      content_groups {
+          contents  @filter(eq(value,"assignment") and eq(label, "type")){
+            label
+            value
+          }
+        }
+    }
+    assignments(func: uid(assignments), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      content_groups{
+        expand(_all_){
+          expand(_all_)
+        }
+      }
+    }
+  }
+
+
+  query assignments($first:int, $offset: int, $user: string) {
+    docs(func: has(assignment))@cascade{
+     assignment {
+        created_date
+        content_groups {
+          contents  @filter(eq(value,$user) and eq(label, "assignee")){
+            label
+            value
+          }
+        }
+      }
+    }
+  }
+
+
+  {
+assignments(func: has(applicant), orderdesc:created_date, first:10, offset:0){
+      hash
+      creator
+      created_date
+      content_groups{
+        expand(_all_){
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      } 
+      applicant{
+        expand(_all_){
+          expand(_all_){
+            expand(_all_)
+          }
+        }
+      }
+    }
+}
+
+
+
+query assignments($first:int, $offset: int) {
+    var(func: has(assignment)){
+      assignments as assignment @cascade{
+      content_groups {
+          contents  @filter(eq(value,"assignment") and eq(label, "type")){
+            label
+            value
+          }
+        }
+      }
+    }
+    assignments(func: uid(assignments), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups{
+          contents {
+            label
+            type
+            value
+            document{
+             hash
+              content_groups{
+          			contents {
+           			 label
+            		 type
+            		 value
+            			document{
+             				hash
+            			}
+          			}
+        			}
+            }
+          }
+      }
+      lastimeshare {
+        content_groups {
+          contents {
+            label
+            type
+            value
+            document{
+             expand(_all_)
+            }
+          }
+        }
+      }
+    }
+  }
+
+--Assignments
+query assignments($first:int, $offset: int) {
+      var(func: has(assignment)){
+        assignments as assignment @cascade{
+        content_groups {
+            contents  @filter(eq(value,"assignment") and eq(label, "type")){
+              label
+              value
+            }
+          }
+        }
+      }
+      assignments(func: uid(assignments), orderdasc:created_date, first: $first, offset: $offset){
+        hash
+        creator
+        created_date
+        content_groups{
+            contents {
+              label
+              type
+              value
+            }
+        }
+      }
+    }
+
+--Assignments time filter
+query assignments($first:int, $offset: int, $from: string) {
+      var(func: has(assignment)){
+        assignments as assignment @filter(ge(created_date, $from )) @cascade{
+        content_groups {
+            contents  @filter(eq(value,"assignment") and eq(label, "type")){
+              label
+              value
+            }
+          }
+        }
+      }
+      assignments(func: uid(assignments), orderasc:created_date, first: $first, offset: $offset){
+        hash
+        creator
+        created_date
+        content_groups{
+            contents {
+              label
+              type
+              value
+            }
+        }
+      }
+    }
+
+--Periods
+  {
+      documents as var(func: type(Document))@cascade{
+        hash
+        content_groups {
+          contents  @filter(eq(value,"period") and eq(type, "name")){
+            label
+            type
+          }
+        }
+      }
+      documents(func: uid(documents)) {
+        hash
+        content_groups {
+            expand(_all_) {
+            expand(_all_)
+          }
+        }
+      }
+    }
+
+
+--Payouts without time and account filters
+query payouts($first:int, $offset: int) {
+    var(func: has(payout)){
+      payouts as payout @cascade{
+        created_date
+      }
+    }
+    payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
+      content_groups {
+          contents {
+            label
+            type
+            value
+          }
+      }
+      payment {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+    }
+  }
+
+--Payouts with time filter
+query payouts($first:int, $offset: int, $from: string) {
+    var(func: has(payout)){
+      payouts as payout @filter(ge(created_date, $from )) @cascade{
+        created_date
+      }
+    }
+    payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups {
+          contents {
+            label
+            type
+            value
+          }
+      }
+      payment {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+    }
+  }
+
+--Payouts with from, to, time filter
+query payouts($from: string, $to: string) {
+    var(func: has(payout)){
+      payouts as payout @filter(between(created_date, $from, $to)) @cascade{
+        created_date
+      }
+    }
+    payouts(func: uid(payouts), orderasc:created_date){
+      hash
+      creator
+      created_date
+      content_groups {
+          contents {
+            label
+            type
+            value
+          }
+      }
+      payment {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+    }
+  }
+
+
+--Payouts with time filter and account
+query payouts($first:int, $offset: int, $from: string, $user: string) {
+    var(func: has(payout)){
+      payouts as payout @filter(ge(created_date, $from )) @cascade{
+        created_date
+        content_groups {
+          contents  @filter(eq(value,$user) and eq(label, "recipient")){
+            label
+            value
+          }
+        }
+      }
+    }
+    payouts(func: uid(payouts), orderdesc:created_date, first: $first, offset: $offset){
+      hash
+      creator
+      created_date
+      content_groups {
+          contents {
+            label
+            type
+            value
+          }
+      }
+      payment {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+    }
+  }
+
+  --Payouts with from, to, time filter
+query payouts($account: string, $from: string, $to: string) {
+    var(func: has(payout)){
+      payouts as payout @filter(between(created_date, $from, $to)) @cascade{
+        created_date
+        content_groups {
+          contents  @filter(eq(value,$account) and eq(label, "recipient")){
+            label
+            value
+          }
+        }
+      }
+    }
+    payouts(func: uid(payouts), orderasc:created_date){
+      hash
+      creator
+      created_date
+      content_groups {
+          contents {
+            label
+            type
+            value
+          }
+      }
+      payment {
+        content_groups {
+          contents {
+            label
+            type
+            value
+          }
+        }
+      }
+    }
+  }

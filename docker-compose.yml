@@ -1,0 +1,20 @@
+version: '3.2'
+    
+services:
+  hypha-eye:
+    build: 
+      context: .
+    command: npm run start
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      - NODE_ENV
+      - PORT
+      - DGRAPH_ENDPOINT
+      - DATA_PATH
+      - STORE_NAME
+    volumes:
+      - hypha-eye-data:${DATA_PATH}    
+    restart: on-failure
+volumes:
+  hypha-eye-data:
